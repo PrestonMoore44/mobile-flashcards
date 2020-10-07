@@ -1,13 +1,45 @@
-import { StatusBar } from 'expo-status-bar';
+import 'react-native-gesture-handler';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform, StatusBar  } from 'react-native';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
+import { TabNavigator, StackNavigator } from 'react-navigation'
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import { Constants } from 'expo'
+import Decks from './components/Decks'
+import SingleDeck from './components/SingleDeck'
+import AddQuestion from './components/AddQuestion'
+import { NavigationContainer } from '@react-navigation/native'
+import { initialize } from './actions'
+import { createStackNavigator } from '@react-navigation/stack'
+
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+    </View>
+  );
+}
+const store = createStore(reducer);
+store.dispatch(initialize())
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={Decks}
+            options={{ title: 'DeckEm' }}
+          />
+          <Stack.Screen name="Single Deck" component={SingleDeck} />
+          <Stack.Screen name="Add Question" component={AddQuestion} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
