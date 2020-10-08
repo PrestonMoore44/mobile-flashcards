@@ -10,9 +10,22 @@ import { Constants } from 'expo'
 import Decks from './components/Decks'
 import SingleDeck from './components/SingleDeck'
 import AddQuestion from './components/AddQuestion'
+import AddDeck from './components/AddDeck'
 import { NavigationContainer } from '@react-navigation/native'
 import { initialize } from './actions'
 import { createStackNavigator } from '@react-navigation/stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const Tab = createBottomTabNavigator();
+
+function MyTabs() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={Decks} />
+      <Tab.Screen name="Add Deck" component={AddDeck} />
+    </Tab.Navigator>
+  );
+}
 
 function HomeScreen() {
   return (
@@ -31,8 +44,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Home"
-            component={Decks}
+            name="Wonderful"
+            component={MyTabs}
             options={{ title: 'DeckEm' }}
           />
           <Stack.Screen name="Single Deck" component={SingleDeck} />

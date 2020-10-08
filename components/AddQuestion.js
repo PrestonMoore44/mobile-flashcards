@@ -1,45 +1,68 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, Platform, TouchableOpacity, SafeAreaView, View, FlatList, TextInput } from 'react-native'
 import { connect } from 'react-redux'
+import { addQuestion } from '../actions'
 
 class AddQuestion extends Component {
     state = {
-        question:'',
-        answer:''
+    	question: {
+	        question:'',
+	        answer:''
+    	},
+    	title:''
     }
 
     onChangeText = (t) => {
-    	console.log(t, "text...");
-    	this.setState({
-    		question: t,
-    	})
+    	//console.log(t, "text...");
+    	this.setState((state, props) => ({
+    		question : {
+    			question: t,
+    			answer: state.question.answer
+    		}
+    	}))
     }
-	// static getDerivedStateFromProps (nextProps, prevState) {
-	// 	console.log("Begin...", nextProps, " <---- Next Props...")
-	//     if(nextProps.route.params) {
-	//     	console.log(nextProps.params, " Next Props...")
-	//        return { deck: nextProps.route.params};
-	//     }
-	//     else return null;
-	// }
+
+    onAnswerChange = (t) => {
+    	//console.log(t, "text...");
+    	this.setState((state,props) => ({
+    		question : {
+    			answer: t,
+    			question: state.question.question
+    		}
+    	}))
+    }
+    saveQuestionAnswer = () => {
+    	//console.log(this.state, "state...");
+    	this.props.dispatch(addQuestion(this.state.question,this.state.title))
+    	this.props.navigation.navigate('Home')
+    }
+	static getDerivedStateFromProps (nextProps, prevState) {
+	    if(nextProps.route.params) {
+	       return { title: nextProps.route.params.title};
+	    }
+	    else return null;
+	}
     
 	render() {
 		let { deck } = this.state
-		let { onChangeText } = this
+		let { onChangeText, onAnswerChange, saveQuestionAnswer } = this
 		return (
 			<View>
 		    	<TextInput
 			      	style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
 			      	placeholder="Question..."
 			      	onChangeText={text => onChangeText(text)}
-			      	value={this.state.question}
+			      	value={this.state.question.question}
 			    />
 		        <TextInput
 		        	placeholder="Answer..."
 			      	style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-			      	onChangeText={text => onChangeText(text)}
-			      	value={this.state.answer}
+			      	onChangeText={text => onAnswerChange(text)}
+			      	value={this.state.question.answer}
 			    />
+		    	<TouchableOpacity onPress={saveQuestionAnswer}>
+				     <Text>Save</Text>
+				</TouchableOpacity>
 		    </View>
 		)
 	}	

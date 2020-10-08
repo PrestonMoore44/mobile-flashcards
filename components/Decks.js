@@ -14,7 +14,7 @@ class Decks extends Component {
     }
 
     setSelected = (item) => {
-    	console.log(item, " Passed in...");
+    	//console.log(item, " Passed in...");
     	this.props.navigation.navigate('Single Deck', item)
     }
 
@@ -37,7 +37,7 @@ class Decks extends Component {
 	}
     
 	render() {
-		console.log(" Hello World...", this.state.deckLists)
+		//console.log(" Hello World...", this.state.deckLists)
 		return (
 		    <SafeAreaView >
 		      <FlatList
@@ -51,7 +51,7 @@ class Decks extends Component {
 }
 
 function mapStateToProps(state) {
-	console.log(Object.values(state), "State... Passed in")
+	//console.log(Object.values(state), "State... Passed in")
     return {
         deckList : Object.values(state)
     }

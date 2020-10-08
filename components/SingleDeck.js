@@ -8,21 +8,21 @@ class SingleDeck extends Component {
     }
 
     addQuestion = () => {
-    	console.log("Adding Questions");
+    	//console.log("Adding Questions");
     	this.props.navigation.navigate("Add Question", this.state.deck)
     }
 
 
     startQuiz = () => {
-    	console.log("Starting Quiz");
+    	//console.log("Starting Quiz");
     }
 
 
 
 	static getDerivedStateFromProps (nextProps, prevState) {
-		console.log("Begin...", nextProps, " <---- Next Props...")
+		//console.log("Begin...", nextProps, " <---- Next Props...")
 	    if(nextProps.route.params) {
-	    	console.log(nextProps.params, " Next Props...")
+	    	//console.log(nextProps.params, " Next Props...")
 	       return { deck: nextProps.route.params};
 	    }
 	    else return null;
