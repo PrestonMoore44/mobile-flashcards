@@ -7,7 +7,14 @@ function entries (state = {}, action) {
       return {
         'Initial Deck' : {
           title: 'Initial Deck',
-          questions : []
+          questions : [{
+            question: 'What are the two main branches of physics?',
+            answer: 'Classical and Modern'
+          },
+          {
+            question: 'What is the first prime number?',
+            answer: '2'
+          }]
         }
       }
     case ADD_QUESTION : 

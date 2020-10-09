@@ -1,52 +1,26 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, Platform, TouchableOpacity, SafeAreaView, View, FlatList } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import { connect } from 'react-redux'
 
-const Item = ({ item, onPress, style }) => (
-    <TouchableOpacity onPress={onPress} >
-        <Text style={styles.bigBlue} >{item.title}</Text>
-        <Text style={styles.bigBlueSub} >Questions: {item.questions.length} 
-        </Text>
-    </TouchableOpacity>
-);
-
-class Decks extends Component {
+class Score extends Component {
     state = {
-        deckList: [],
+        score:0
     }
-
-    setSelected = (item) => {
-    	//console.log(item, " Passed in...");
-    	this.props.navigation.navigate('Single Deck', item)
-    }
-
-	renderItem = ({ item }) => {
-	    const backgroundColor = "#f9c2ff";
-	    return (
-	      <Item
-	        item={item}
-	        onPress={() => this.setSelected(item)}
-	      />
-	    );
-	};
 
 	static getDerivedStateFromProps (nextProps, prevState) {
-	    if(nextProps.deckList!==prevState.deckList){
-	       return { deckList: nextProps.deckList};
+      console.log(nextProps.route.params)
+	    if(nextProps){
+	       return { score: nextProps.route.params};
 	    }
 	    else return null;
 	}
     
 	render() {
-		console.log(" Hello World...", this.state.deckList)
 		return (
-		    <SafeAreaView style={styles.container}>
-		      <FlatList
-		        data={this.state.deckList}
-		        renderItem={this.renderItem}
-		        keyExtractor={item => item.title}
-		      />
-		    </SafeAreaView>
+      <View style={styles.container}>
+        <Text style={styles.bigBlue}>Congratulations!</Text>
+        <Text style={styles.bigBlue}>{this.state.score}</Text>
+      </View>
 		)
 	}	
 }
@@ -103,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps)(Decks);
+export default connect(mapStateToProps)(Score);

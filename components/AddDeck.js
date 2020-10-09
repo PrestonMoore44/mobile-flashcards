@@ -34,7 +34,7 @@ class AddDeck extends Component {
 		    	<Text>What Is Your New Deck's Name</Text>
 		        <TextInput
 		        	placeholder="Deck Name..."
-			      	style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+			      	style={{ height: 40, borderColor: 'gray', borderWidth: 1,fontSize:18  }}
 			      	onChangeText={text => onAnswerChange(text)}
 			      	value={this.state.title}
 			    />

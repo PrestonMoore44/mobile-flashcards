@@ -15,6 +15,7 @@ class SingleDeck extends Component {
 
     startQuiz = () => {
     	//console.log("Starting Quiz");
+    	this.props.navigation.navigate("Quiz", this.state.deck)
     }
 
 
@@ -31,15 +32,17 @@ class SingleDeck extends Component {
 	render() {
 		let { deck } = this.state
 		return (
-			<View>
-		    	<Text>{deck.title}</Text>
-		    	<Text>{deck.questions.length} Questions</Text>
-		    	<TouchableOpacity onPress={this.addQuestion}>
-				     <Text >Add Question</Text>
-				</TouchableOpacity>
-		    	<TouchableOpacity onPress={this.startQuiz}>
-				     <Text >Start Quiz</Text>
-				</TouchableOpacity>
+			<View style={styles.container}>
+		    	<Text style={styles.bigBlue}>{deck.title}</Text>
+		    	<Text style={styles.bigBlueSub}>{deck.questions.length} Questions</Text>
+		    	<View style={{ flex: 1, alignItems: 'center' }}>
+			    	<TouchableOpacity style={styles.button} onPress={this.addQuestion}>
+					     <Text >Add Question</Text>
+					</TouchableOpacity>
+			    	<TouchableOpacity style={styles.buttonTwo} onPress={this.startQuiz}>
+					     <Text >Start Quiz</Text>
+					</TouchableOpacity>
+				</View>
 		    </View>
 		)
 	}	
@@ -50,5 +53,48 @@ function mapStateToProps(state) {
         deckList : Object.values(state)
     }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    fontSize: 18,
+    height:"100%",
+    width: "100%",
+    backgroundColor:"white"
+  },
+  bigBlue: {
+  	textAlign: 'center', // <-- the magic
+    fontWeight: 'bold',
+    color: 'black',
+    paddingTop:100,
+    fontWeight: 'bold',
+    fontSize: 30,
+  },
+  button: {
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 10,
+    width:200,
+    borderWidth:2,
+    borderColor:"orange",
+    padding: 10,
+    marginBottom:25
+  },
+  buttonTwo: {
+    alignItems: "center",
+    borderRadius: 10,
+    width:200,
+    backgroundColor: "orange",
+    padding: 10
+  },
+  bigBlueSub: {
+  	textAlign: 'center', // <-- the magic
+    fontWeight: 'bold',
+    color: 'grey',
+    paddingTop:5,
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom:150
+  },
+});
 
 export default connect(mapStateToProps)(SingleDeck);

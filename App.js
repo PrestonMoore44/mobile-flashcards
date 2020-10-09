@@ -10,6 +10,8 @@ import { Constants } from 'expo'
 import Decks from './components/Decks'
 import SingleDeck from './components/SingleDeck'
 import AddQuestion from './components/AddQuestion'
+import Score from './components/Score'
+import Quiz from './components/Quiz'
 import AddDeck from './components/AddDeck'
 import { NavigationContainer } from '@react-navigation/native'
 import { initialize } from './actions'
@@ -50,6 +52,8 @@ export default function App() {
           />
           <Stack.Screen name="Single Deck" component={SingleDeck} />
           <Stack.Screen name="Add Question" component={AddQuestion} />
+          <Stack.Screen name="Quiz" component={Quiz} />
+          <Stack.Screen name="Score" component={Score} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
