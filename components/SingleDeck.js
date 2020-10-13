@@ -3,30 +3,23 @@ import { Text, StyleSheet, Platform, TouchableOpacity, SafeAreaView, View, FlatL
 import { connect } from 'react-redux'
 
 class SingleDeck extends Component {
-    state = {
-        deck : {}
-    }
+  state = {
+    deck : {}
+  }
 
-    addQuestion = () => {
-    	//console.log("Adding Questions");
-    	this.props.navigation.navigate("Add Question", this.state.deck)
-    }
+  addQuestion = () => {
+    this.props.navigation.navigate("Add Question", this.state.deck)
+  }
 
-
-    startQuiz = () => {
-    	//console.log("Starting Quiz");
-    	this.props.navigation.navigate("Quiz", this.state.deck)
-    }
-
-
+  startQuiz = () => {
+    this.props.navigation.navigate("Quiz", this.state.deck)
+  }
 
 	static getDerivedStateFromProps (nextProps, prevState) {
-		//console.log("Begin...", nextProps, " <---- Next Props...")
-	    if(nextProps.route.params) {
-	    	//console.log(nextProps.params, " Next Props...")
-	       return { deck: nextProps.route.params};
-	    }
-	    else return null;
+	  if(nextProps.route.params) {
+	    return { deck: nextProps.route.params};
+	  }
+	  else return null;
 	}
     
 	render() {
@@ -40,7 +33,7 @@ class SingleDeck extends Component {
 					     <Text >Add Question</Text>
 					</TouchableOpacity>
 			    	<TouchableOpacity style={styles.buttonTwo} onPress={this.startQuiz}>
-					     <Text >Start Quiz</Text>
+					     <Text style={{color:"white"}}>Start Quiz</Text>
 					</TouchableOpacity>
 				</View>
 		    </View>
@@ -49,9 +42,9 @@ class SingleDeck extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        deckList : Object.values(state)
-    }
+  return {
+    deckList : Object.values(state)
+  }
 }
 
 const styles = StyleSheet.create({
@@ -75,15 +68,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width:200,
     borderWidth:2,
-    borderColor:"orange",
+    borderColor:"black",
     padding: 10,
+    fontSize:18,
     marginBottom:25
   },
   buttonTwo: {
     alignItems: "center",
     borderRadius: 10,
     width:200,
-    backgroundColor: "orange",
+    fontSize:18,
+    borderWidth:2,
+    borderColor:"black",
+    backgroundColor: "black",
     padding: 10
   },
   bigBlueSub: {

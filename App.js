@@ -22,7 +22,28 @@ const Tab = createBottomTabNavigator();
 
 function MyTabs() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused
+                ? 'ios-home'
+                : 'ios-home';
+            } else if (route.name === 'Add Deck') {
+              iconName = focused ? 'ios-add' : 'ios-add';
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+      >
       <Tab.Screen name="Home" component={Decks} />
       <Tab.Screen name="Add Deck" component={AddDeck} />
     </Tab.Navigator>
@@ -48,7 +69,7 @@ export default function App() {
           <Stack.Screen
             name="Wonderful"
             component={MyTabs}
-            options={{ title: 'DeckEm' }}
+            options={{ title: 'Home' }}
           />
           <Stack.Screen name="Single Deck" component={SingleDeck} />
           <Stack.Screen name="Add Question" component={AddQuestion} />

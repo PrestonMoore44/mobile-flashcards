@@ -12,35 +12,44 @@ class Quiz extends Component {
         answer:'',
         checkMe:false,
         showMe:false,
+        showAnswer:false,
         correctCount:0,
     }
 
     onAnswerChange = (t) => {
-    	//console.log(this.state, "State...");
     	this.setState((state, props) => ({
     		answer: t,
     	}))
     }
 
     resetCheckMe = () => {
-    	console.log(this.state, " State before tansfer....")
     	if (this.state.index !== (this.state.deck.length -1)) { //Go to next question, if not on last question...
 	    	this.setState((state, props) => ({
 		    	checkMe: false,
 		    	showMe:false,
 		    	index: state.index + 1,
+                answer:'',
+                showQuestionAnswer: false,
 		    	deckQuestion: state.deck[state.index+1]
 		    }))
     	} else {
-	    	this.props.navigation.navigate('Score', this.state.correctCount)
+            this.setState((state, props) => ({
+                checkMe: false,
+                showMe:false,
+                index: 0,
+                answer:'',
+                showQuestionAnswer: false,
+                deckQuestion: state.deck[0]
+            }))
+	    	this.props.navigation.navigate('Score', this.state)
     	}
 	}
 
     showAnswer = () => {
-    	this.setState((state, props) => ({ showMe: true }))
+    	this.setState((state, props) => ({ showQuestionAnswer: true }))
     	setTimeout(() => {
 	    	this.resetCheckMe();		
-    	},6000)
+    	},4500)
     }
 
     checkAnswer = () => {
@@ -48,7 +57,7 @@ class Quiz extends Component {
     		state.answer == state.deckQuestion.answer ?
     		{
     			checkMe: true,
-    			correctCount: state.correctCount+1
+    			correctCount: state.correctCount+1,
     		} :
     		{
     			checkMe: true,
@@ -56,50 +65,56 @@ class Quiz extends Component {
     	))
     	setTimeout(() => {
 	    	this.resetCheckMe();		
-    	},6000)
+    	},4500)
     }
 
 	static getDerivedStateFromProps (nextProps, prevState) {
-	    if(nextProps.route.params) {
-	    	//console.log(nextProps.route.params, " Next Props...")
+	    if (nextProps.route.params) {
 	       return { 
 	       	deck: nextProps.route.params.questions,
 	       	deckQuestion: nextProps.route.params.questions[prevState.index]
 	       };
-	    }
-	    else return null;
+	    } else return null;
 	}
     
 	render() {
-		let { deck, deckQuestion,index,checkMe, answer, showMe } = this.state
+		let { deck, deckQuestion,index,checkMe, answer, showMe, showQuestionAnswer } = this.state
 		let { onAnswerChange, checkAnswer, showAnswer } = this
 		return (
-			<View style={styles.container}>
-			    {  showMe  &&
-				        <EmojiRain emoji="🤜🤛" count={25}/>
+			<View style={[styles.container, (checkMe && deckQuestion.answer == answer) ? 
+                    styles.greenBack : checkMe && (deckQuestion.answer !== answer) ? styles.redBack : 
+                    showQuestionAnswer ? styles.yellowBack : styles.container
+                    ]}>
+			    {  showQuestionAnswer &&
+				        <EmojiRain emoji="🤜🤛" count={5}/>
 			    }
-			    {  checkMe && deckQuestion.answer === answer &&
-				        <EmojiRain emoji="👍☺️👍" count={25}/>
+			    {  checkMe && (deckQuestion.answer == answer) &&
+				        <EmojiRain emoji="👍☺️" count={5}/>
 			    }
-			    {  checkMe && deckQuestion.answer !== answer &&
-				        <EmojiRain emoji="👎😕👎" count={25}/>
+			    {  checkMe && (deckQuestion.answer !== answer) &&
+				        <EmojiRain emoji="👎😕" count={5}/>
 			    }
 				<Text style={{marginBottom:40, fontSize:20, fontWeight:'bold', paddingLeft:10}}>{index + 1} / {deck.length}</Text>
 		    	<QuizQuestion question={deckQuestion}></QuizQuestion>
 		    	<View style={{ flex: 1, alignItems: 'center', marginTop: 40 }}>
 				    <TextInput
 				        	placeholder="Answer..."
-					      	style={{ height: 40, borderColor: 'gray', borderWidth: 1,width:300,padding:5,fontSize:18}}
+					      	style={{ height: 40, backgroundColor:'white', borderColor: 'gray', borderWidth: 1,width:300,padding:5,fontSize:18}}
 					      	onChangeText={text => onAnswerChange(text)}
 					      	value={answer}
 					    />
+                    <View style={{ alignItems: 'center', height:40, fontSize: 27, marginTop:60}}>
+                    {  showQuestionAnswer &&
+                        <Text style={{ fontSize: 22}}>{deckQuestion.answer}</Text>
+                    }
+                    </View>
 				</View>
 			    <View style={{ flex: 1, alignItems: 'center' }}>
 	 		    	<TouchableOpacity style={styles.button} onPress={showAnswer}>
 					     <Text >Show Answer</Text>
 					</TouchableOpacity>
 	 		    	<TouchableOpacity style={styles.buttonTwo} onPress={checkAnswer}>
-					     <Text >Check Answer</Text>
+					     <Text style={{color: "white"}}>Check Answer</Text>
 					</TouchableOpacity>
 				</View>
 		    </View>
@@ -112,7 +127,6 @@ function mapStateToProps(state) {
         deckList : Object.values(state)
     }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -130,13 +144,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 30,
   },
+  greenBack: {
+    backgroundColor: "#6aff65"
+  },
+  yellowBack : {
+    backgroundColor: '#feff8f'
+  },
+  redBack: {
+    backgroundColor: '#ff6565'
+  },
   button: {
     alignItems: "center",
     backgroundColor: "white",
     borderRadius: 10,
     width:200,
     borderWidth:2,
-    borderColor:"orange",
+    borderColor:"black",
     padding: 10,
     fontSize:18,
     marginBottom:25
@@ -146,7 +169,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width:200,
     fontSize:18,
-    backgroundColor: "orange",
+    borderWidth:2,
+    borderColor:"black",
+    backgroundColor: "black",
     padding: 10
   },
   bigBlueSub: {

@@ -1,31 +1,49 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 
 class Score extends Component {
-    state = {
-        score:0
-    }
+  state = {
+    data:{}
+  }
+
+  retake = () => {
+    this.props.navigation.navigate("Quiz", this.state.data.deck )
+  }
+
+  goHome = () => {
+    this.props.navigation.navigate("Home")
+  }
 
 	static getDerivedStateFromProps (nextProps, prevState) {
-      console.log(nextProps.route.params)
+      console.log(nextProps.route.params," <---- Params in score.....")
 	    if(nextProps){
-	       return { score: nextProps.route.params};
+	       return { data: nextProps.route.params};
 	    }
 	    else return null;
 	}
     
 	render() {
+    let { retake, goHome } = this;
 		return (
       <View style={styles.container}>
-        <Text style={styles.bigBlue}>Congratulations!</Text>
-        <Text style={styles.bigBlue}>{this.state.score}</Text>
+        <Text style={styles.bigBlueF}>Congratulations!</Text>
+        <Text style={styles.bigBlue}>Your Score: {(this.state.data.correctCount / this.state.data.deck.length) * 100}%</Text>
+        <View style={{ flex: 1, alignItems: 'center', marginTop:50}}>
+            <TouchableOpacity style={styles.button} onPress={retake}>
+               <Text >Retake Quiz</Text>
+          </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonTwo} onPress={goHome}>
+               <Text style={{color:"white"}}>Go Home</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 		)
 	}	
 }
 
 function mapStateToProps(state) {
+
     return {
         deckList : Object.values(state)
     }
@@ -45,7 +63,7 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingTop:100,
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 27,
   },
   button: {
     alignItems: "center",
@@ -53,7 +71,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width:200,
     borderWidth:2,
-    borderColor:"orange",
+    borderColor:"black",
     padding: 10,
     fontSize:18,
     marginBottom:25
@@ -63,17 +81,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width:200,
     fontSize:18,
-    backgroundColor: "orange",
+    borderWidth:2,
+    borderColor:"black",
+    backgroundColor: "black",
     padding: 10
   },
-  bigBlueSub: {
+  bigBlueF: {
   	textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
-    color: 'grey',
-    paddingTop:5,
+    color: 'black',
+    paddingTop:100,
     fontWeight: 'bold',
-    fontSize: 20,
-    marginBottom:150
+    fontSize: 34,
   },
 });
 

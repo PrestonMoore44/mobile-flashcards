@@ -8,39 +8,38 @@ class AddDeck extends Component {
     	title:''
     }
     saveDeck = () => {
-    	console.log(this.state, " To Be saved...");
     	this.props.dispatch(addDeck(this.state))
     	this.props.navigation.navigate('Home')
+     	this.setState((state,props) => ({
+    		title: ''
+    	}))
     }
 
     onAnswerChange = (t) => {
-    	//console.log(t, "text...");
     	this.setState((state,props) => ({
     		title: t
     	}))
     }
-	// static getDerivedStateFromProps (nextProps, prevState) {
-	//     if(nextProps.route.params) {
-	//        return { title: nextProps.route.params.title};
-	//     }
-	//     else return null;
-	// }
     
 	render() {
 		let { deck } = this.state
 		let { onAnswerChange, saveDeck} = this
 		return (
-			<View>
-		    	<Text>What Is Your New Deck's Name</Text>
-		        <TextInput
-		        	placeholder="Deck Name..."
-			      	style={{ height: 40, borderColor: 'gray', borderWidth: 1,fontSize:18  }}
-			      	onChangeText={text => onAnswerChange(text)}
-			      	value={this.state.title}
-			    />
-		    	<TouchableOpacity onPress={saveDeck}>
-				     <Text>Save</Text>
+			<View style={styles.container}>
+		    	<Text style={styles.bigBlue}>What Is Your New Deck's Name</Text>
+		    	<View style={{ flex: 1, alignItems: 'center', marginTop: 100 }}>
+			        <TextInput
+			        	placeholder="Deck Name..."
+				      	style={{ height: 40, borderColor: 'gray', borderWidth: 1,width:300,padding:5,fontSize:18  }}
+				      	onChangeText={text => onAnswerChange(text)}
+				      	value={this.state.title}
+				    />
+			    </View>
+			    <View style={{ flex: 1, alignItems: 'center', marginTop:50}}>
+		    	<TouchableOpacity style={styles.buttonTwo} onPress={saveDeck}>
+				     <Text style={{color:"white"}}>Save</Text>
 				</TouchableOpacity>
+				</View>
 		    </View>
 		)
 	}	
@@ -51,5 +50,33 @@ function mapStateToProps(state) {
         deckList : Object.values(state)
     }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    fontSize: 18,
+    height:"100%",
+    width: "100%",
+    backgroundColor:"white",
+    paddingTop:10
+  },
+  bigBlue: {
+  	textAlign: 'center', // <-- the magic
+    fontWeight: 'bold',
+    color: 'black',
+    paddingTop:100,
+    fontWeight: 'bold',
+    fontSize: 30,
+  },
+  buttonTwo: {
+    alignItems: "center",
+    borderRadius: 10,
+    width:200,
+    fontSize:18,
+    borderWidth:2,
+    borderColor:"black",
+    backgroundColor: "black",
+    padding: 10
+  }
+});
 
 export default connect(mapStateToProps)(AddDeck);

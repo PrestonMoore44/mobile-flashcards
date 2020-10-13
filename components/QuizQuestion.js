@@ -8,9 +8,7 @@ class QuizQuestion extends Component {
     }
 
 	static getDerivedStateFromProps (nextProps, prevState) {
-		console.log("Begin...", nextProps, " <---- Next Props...")
 	    if(nextProps) {
-	    	console.log(nextProps, " INside Quiz Question")
 	       return { question: nextProps.question};
 	    }
 	    else return null;

@@ -13,7 +13,6 @@ class AddQuestion extends Component {
     }
 
     onChangeText = (t) => {
-    	//console.log(t, "text...");
     	this.setState((state, props) => ({
     		question : {
     			question: t,
@@ -23,7 +22,6 @@ class AddQuestion extends Component {
     }
 
     onAnswerChange = (t) => {
-    	//console.log(t, "text...");
     	this.setState((state,props) => ({
     		question : {
     			answer: t,
@@ -32,10 +30,10 @@ class AddQuestion extends Component {
     	}))
     }
     saveQuestionAnswer = () => {
-    	//console.log(this.state, "state...");
     	this.props.dispatch(addQuestion(this.state.question,this.state.title))
     	this.props.navigation.navigate('Home')
     }
+
 	static getDerivedStateFromProps (nextProps, prevState) {
 	    if(nextProps.route.params) {
 	       return { title: nextProps.route.params.title};
@@ -64,7 +62,7 @@ class AddQuestion extends Component {
 			    </View>
 			    <View style={{ flex: 1, alignItems: 'center' }}>
 			    	<TouchableOpacity style={styles.buttonTwo} onPress={saveQuestionAnswer}>
-					     <Text>Save</Text>
+					     <Text style={{color:"white"}}>Save</Text>
 					</TouchableOpacity>
 				</View>
 		    </View>
@@ -85,42 +83,16 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor:"white"
   },
-  bigBlue: {
-  	textAlign: 'center', // <-- the magic
-    fontWeight: 'bold',
-    color: 'black',
-    paddingTop:100,
-    fontWeight: 'bold',
-    fontSize: 30,
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "white",
-    borderRadius: 10,
-    width:200,
-    borderWidth:2,
-    borderColor:"orange",
-    padding: 10,
-    fontSize:18,
-    marginBottom:25
-  },
   buttonTwo: {
     alignItems: "center",
     borderRadius: 10,
     width:200,
-    backgroundColor: "orange",
-    padding: 10,
     fontSize:18,
-  },
-  bigBlueSub: {
-  	textAlign: 'center', // <-- the magic
-    fontWeight: 'bold',
-    color: 'grey',
-    paddingTop:5,
-    fontWeight: 'bold',
-    fontSize: 20,
-    marginBottom:150
-  },
+    borderWidth:2,
+    borderColor:"black",
+    backgroundColor: "black",
+    padding: 10
+  }
 });
 
 export default connect(mapStateToProps)(AddQuestion);
