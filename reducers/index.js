@@ -1,7 +1,7 @@
 import { RECEIVE_ENTRIES, ADD_ENTRY, INITIALIZE, ADD_QUESTION, ADD_DECK } from '../actions'
 
 function entries (state = {}, action) {
-  //console.log(state[action.title], action.question, "Question...")
+  console.log( " State then action a...Question...",state)
   switch (action.type) {
     case INITIALIZE : 
       return {
@@ -24,7 +24,8 @@ function entries (state = {}, action) {
           {
             [action.title] : {
               title: action.title,
-              questions: [action.question] 
+              questions: !!state[action.title] && !!state[action.title].questions && state[action.title].questions.length > 0 ? 
+               [...state[action.title].questions, action.question] : [action.question] 
           }
         })
       }
