@@ -3,6 +3,7 @@ require_relative '../node_modules/react-native-unimodules/cocoapods.rb'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 platform :ios, '10.0'
+pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
 target 'mobileflashcards' do
   use_unimodules!

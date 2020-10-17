@@ -1,21 +1,33 @@
-import { RECEIVE_ENTRIES, ADD_ENTRY, INITIALIZE, ADD_QUESTION, ADD_DECK } from '../actions'
+import { RECEIVE_ENTRIES, ADD_ENTRY, INITIALIZE, ADD_QUESTION, ADD_DECK, ALERT, INCREMENT_SCORE  } from '../actions'
 
 function entries (state = {}, action) {
-  console.log( " State then action a...Question...",state)
   switch (action.type) {
     case INITIALIZE : 
       return {
-        'Initial Deck' : {
-          title: 'Initial Deck',
-          questions : [{
-            question: 'What are the two main branches of physics???',
-            answer: 'Classical and Modern'
-          },
-          {
-            question: 'What is the first prime number?',
-            answer: '2'
-          }]
+        'Attempted Answers' : {
+          answercount: 0,
+          showAlert:false,
         }
+      }
+    case ALERT : 
+      return {
+        ...state,
+        'Attempted Answers' : 
+          Object.assign({},
+          state['Attempted Answers'],
+          {
+            showAlert: state['Attempted Answers'].answercount > 0 ? false : true
+          })
+      }
+    case INCREMENT_SCORE : 
+      return {
+        ...state,
+        'Attempted Answers' : 
+          Object.assign({},
+          state['Attempted Answers'],
+          {
+            answercount: 1,
+          })
       }
     case ADD_QUESTION : 
       return {

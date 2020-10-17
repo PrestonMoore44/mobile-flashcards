@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, StyleSheet, Platform, TouchableOpacity, SafeAreaView, View, FlatList, TextInput } from 'react-native'
 import { connect } from 'react-redux'
 import { addQuestion } from '../actions'
+import AwesomeAlert from 'react-native-awesome-alerts'
 
 class AddQuestion extends Component {
     state = {
@@ -9,7 +10,8 @@ class AddQuestion extends Component {
 	        question:'',
 	        answer:''
     	},
-    	title:''
+    	title:'',
+        answers:{},
     }
 
     onChangeText = (t) => {
@@ -36,7 +38,10 @@ class AddQuestion extends Component {
 
 	static getDerivedStateFromProps (nextProps, prevState) {
 	    if(nextProps.route.params) {
-	       return { title: nextProps.route.params.title};
+	        return { 
+                title: nextProps.route.params.title,
+                answers:nextProps.answers
+            };
 	    }
 	    else return null;
 	}
@@ -46,23 +51,38 @@ class AddQuestion extends Component {
 		let { onChangeText, onAnswerChange, saveQuestionAnswer } = this
 		return (
 			<View style={styles.container}>
+                <AwesomeAlert
+                    show={!!this.state.answers.showAlert}
+                    showProgress={false}
+                    title="AwesomeAlert"
+                    message="I have a message for you!"
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showConfirmButton={true}
+                    confirmText="Got it"
+                    onConfirmPressed={() => {
+                      this.setState({
+                        answers : Object.assign(this.state.answers, { showAlert: false})
+                      });
+                    }}
+                  />
 				<View style={{ flex: 1, alignItems: 'center', marginTop: 100 }}>
 			    	<TextInput
-				      	style={{ height: 40, borderColor: 'gray', borderWidth: 1,width:300,marginBottom:50, padding:5,fontSize:18  }}
+				      	style={{ height: 40,  backgroundColor:'white',width:300,marginBottom:50, padding:5,fontSize:18  }}
 				      	placeholder="Question..."
 				      	onChangeText={text => onChangeText(text)}
 				      	value={this.state.question.question}
 				    />
 			        <TextInput
 			        	placeholder="Answer..."
-				      	style={{ height: 40, borderColor: 'gray', borderWidth: 1,width:300,padding:5,fontSize:18  }}
+				      	style={{ height: 40, backgroundColor:'white',width:300,padding:5,fontSize:18  }}
 				      	onChangeText={text => onAnswerChange(text)}
 				      	value={this.state.question.answer}
 				    />
 			    </View>
 			    <View style={{ flex: 1, alignItems: 'center' }}>
 			    	<TouchableOpacity style={styles.buttonTwo} onPress={saveQuestionAnswer}>
-					     <Text style={{color:"white"}}>Save</Text>
+					     <Text style={{color:"#0C9BD2", fontSize:18}}>Save</Text>
 					</TouchableOpacity>
 				</View>
 		    </View>
@@ -72,7 +92,7 @@ class AddQuestion extends Component {
 
 function mapStateToProps(state) {
     return {
-        deckList : Object.values(state)
+        answers : Object.values(state).filter(it => !it.questions)[0]
     }
 }
 
@@ -81,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height:"100%",
     width: "100%",
-    backgroundColor:"white"
+    backgroundColor:"#5eb7d8"
   },
   buttonTwo: {
     alignItems: "center",
@@ -89,8 +109,8 @@ const styles = StyleSheet.create({
     width:200,
     fontSize:18,
     borderWidth:2,
-    borderColor:"black",
-    backgroundColor: "black",
+    borderColor:"white",
+    backgroundColor: "white",
     padding: 10
   }
 });

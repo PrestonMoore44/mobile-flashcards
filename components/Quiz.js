@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Text, StyleSheet, Platform, TouchableOpacity, SafeAreaView, View, FlatList, TextInput } from 'react-native'
 import { connect } from 'react-redux'
 import { EmojiRain } from 'react-native-emoji-rain'
+import { incrementScore } from '../actions'
 import QuizQuestion from './QuizQuestion'
+import AwesomeAlert from 'react-native-awesome-alerts'
 
 class Quiz extends Component {
     state = {
@@ -14,6 +16,7 @@ class Quiz extends Component {
         showMe:false,
         showAnswer:false,
         correctCount:0,
+        answers:{},
     }
 
     onAnswerChange = (t) => {
@@ -33,6 +36,7 @@ class Quiz extends Component {
 		    	deckQuestion: state.deck[state.index+1]
 		    }))
     	} else {
+            this.props.dispatch(incrementScore())
             this.setState((state, props) => ({
                 checkMe: false,
                 showMe:false,
@@ -70,7 +74,8 @@ class Quiz extends Component {
 
 	static getDerivedStateFromProps (nextProps, prevState) {
 	    if (nextProps.route.params) {
-	       return { 
+	       return {
+            answers: nextProps.answers,
 	       	deck: nextProps.route.params.questions,
 	       	deckQuestion: nextProps.route.params.questions[prevState.index]
 	       };
@@ -85,6 +90,21 @@ class Quiz extends Component {
                     styles.greenBack : checkMe && (deckQuestion.answer !== answer) ? styles.redBack : 
                     showQuestionAnswer ? styles.yellowBack : styles.container
                     ]}>
+                <AwesomeAlert
+                    show={!!this.state.answers.showAlert}
+                    showProgress={false}
+                    title="AwesomeAlert"
+                    message="I have a message for you!"
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showConfirmButton={true}
+                    confirmText="Got it"
+                    onConfirmPressed={() => {
+                      this.setState({
+                        answers : Object.assign(this.state.answers, { showAlert: false})
+                      });
+                    }}
+                  />
 			    {  showQuestionAnswer &&
 				        <EmojiRain emoji="🤜🤛" count={5}/>
 			    }
@@ -94,12 +114,12 @@ class Quiz extends Component {
 			    {  checkMe && (deckQuestion.answer !== answer) &&
 				        <EmojiRain emoji="👎😕" count={5}/>
 			    }
-				<Text style={{marginBottom:40, fontSize:20, fontWeight:'bold', paddingLeft:10}}>{index + 1} / {deck.length}</Text>
+				<Text style={{marginBottom:40, fontSize:20, fontWeight:'bold', paddingLeft:10, color:"white"}}>{index + 1} / {deck.length}</Text>
 		    	<QuizQuestion question={deckQuestion}></QuizQuestion>
 		    	<View style={{ flex: 1, alignItems: 'center', marginTop: 40 }}>
 				    <TextInput
 				        	placeholder="Answer..."
-					      	style={{ height: 40, backgroundColor:'white', borderColor: 'gray', borderWidth: 1,width:300,padding:5,fontSize:18}}
+					      	style={{ height: 40, backgroundColor:'white', width:300,padding:5,fontSize:18}}
 					      	onChangeText={text => onAnswerChange(text)}
 					      	value={answer}
 					    />
@@ -111,10 +131,10 @@ class Quiz extends Component {
 				</View>
 			    <View style={{ flex: 1, alignItems: 'center' }}>
 	 		    	<TouchableOpacity style={styles.button} onPress={showAnswer}>
-					     <Text >Show Answer</Text>
+					     <Text style={{fontSize:18, color:"#5eb7d8"}}>Show Answer</Text>
 					</TouchableOpacity>
 	 		    	<TouchableOpacity style={styles.buttonTwo} onPress={checkAnswer}>
-					     <Text style={{color: "white"}}>Check Answer</Text>
+					     <Text style={{color: "white", fontSize:18}}>Check Answer</Text>
 					</TouchableOpacity>
 				</View>
 		    </View>
@@ -124,7 +144,7 @@ class Quiz extends Component {
 
 function mapStateToProps(state) {
     return {
-        deckList : Object.values(state)
+        answers : Object.values(state).filter(it => !it.questions)[0]
     }
 }
 
@@ -133,13 +153,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height:"100%",
     width: "100%",
-    backgroundColor:"white",
+    backgroundColor:"#5eb7d8",
     paddingTop:10
   },
   bigBlue: {
   	textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     paddingTop:100,
     fontWeight: 'bold',
     fontSize: 30,
@@ -159,9 +179,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width:200,
     borderWidth:2,
-    borderColor:"black",
+    borderColor:"white",
     padding: 10,
-    fontSize:18,
     marginBottom:25
   },
   buttonTwo: {
@@ -170,8 +189,8 @@ const styles = StyleSheet.create({
     width:200,
     fontSize:18,
     borderWidth:2,
-    borderColor:"black",
-    backgroundColor: "black",
+    borderColor:"#0C9BD2",
+    backgroundColor: "#0C9BD2",
     padding: 10
   },
   bigBlueSub: {

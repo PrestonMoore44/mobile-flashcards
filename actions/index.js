@@ -3,6 +3,8 @@ export const ADD_ENTRY = 'ADD_ENTRY'
 export const INITIALIZE = 'INITIALIZE'
 export const ADD_QUESTION = 'ADD_QUESTION'
 export const ADD_DECK = 'ADD_DECK'
+export const ALERT = 'ALERT'
+export const INCREMENT_SCORE = "INCREMENT_SCORE"
 
 export function receiveEntries (entries) {
   return {
@@ -15,6 +17,18 @@ export function initialize () {
 	return {
 		type : INITIALIZE
 	}
+}
+
+export function incrementScore() {
+  return {
+    type : INCREMENT_SCORE
+  }  
+}
+
+export function alertUs () {
+  return {
+    type : ALERT
+  }
 }
 
 export function addEntry (entry) {

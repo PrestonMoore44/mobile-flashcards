@@ -4,7 +4,9 @@ import { connect } from 'react-redux'
 
 class Score extends Component {
   state = {
-    data:{}
+    data:{},
+    answers: {},
+    correctCount:0
   }
 
   retake = () => {
@@ -16,9 +18,12 @@ class Score extends Component {
   }
 
 	static getDerivedStateFromProps (nextProps, prevState) {
-      console.log(nextProps.route.params," <---- Params in score.....")
-	    if(nextProps){
-	       return { data: nextProps.route.params};
+	    if(!!nextProps){
+	       return { 
+          data: nextProps.route.params.deck,
+          correctCount: nextProps.route.params.correctCount,
+          answers: nextProps.route.params.answers,
+         };
 	    }
 	    else return null;
 	}
@@ -28,13 +33,13 @@ class Score extends Component {
 		return (
       <View style={styles.container}>
         <Text style={styles.bigBlueF}>Congratulations!</Text>
-        <Text style={styles.bigBlue}>Your Score: {(this.state.data.correctCount / this.state.data.deck.length) * 100}%</Text>
+        <Text style={styles.bigBlue}>Your Score: {(this.state.correctCount / this.state.data.length) * 100}%</Text>
         <View style={{ flex: 1, alignItems: 'center', marginTop:50}}>
             <TouchableOpacity style={styles.button} onPress={retake}>
-               <Text >Retake Quiz</Text>
+               <Text style={{fontSize:18, color:"#5eb7d8"}} >Retake Quiz</Text>
           </TouchableOpacity>
             <TouchableOpacity style={styles.buttonTwo} onPress={goHome}>
-               <Text style={{color:"white"}}>Go Home</Text>
+               <Text style={{color:"white", fontSize:18}}>Go Home</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -43,10 +48,9 @@ class Score extends Component {
 }
 
 function mapStateToProps(state) {
-
-    return {
-        deckList : Object.values(state)
-    }
+  return {
+    answers : Object.values(state).filter(it => !it.questions)[0]
+  }
 }
 
 const styles = StyleSheet.create({
@@ -54,13 +58,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height:"100%",
     width: "100%",
-    backgroundColor:"white",
+    backgroundColor:"#5eb7d8",
     paddingTop:10
   },
   bigBlue: {
   	textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     paddingTop:100,
     fontWeight: 'bold',
     fontSize: 27,
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width:200,
     borderWidth:2,
-    borderColor:"black",
+    borderColor:"white",
     padding: 10,
     fontSize:18,
     marginBottom:25
@@ -82,14 +86,14 @@ const styles = StyleSheet.create({
     width:200,
     fontSize:18,
     borderWidth:2,
-    borderColor:"black",
-    backgroundColor: "black",
+    borderColor:"#0C9BD2",
+    backgroundColor: "#0C9BD2",
     padding: 10
   },
   bigBlueF: {
   	textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     paddingTop:100,
     fontWeight: 'bold',
     fontSize: 34,

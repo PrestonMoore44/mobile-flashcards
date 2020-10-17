@@ -10,13 +10,15 @@ import { Constants } from 'expo'
 import Decks from './components/Decks'
 import SingleDeck from './components/SingleDeck'
 import AddQuestion from './components/AddQuestion'
+import SplashPage from './components/SplashPage'
 import Score from './components/Score'
 import Quiz from './components/Quiz'
 import AddDeck from './components/AddDeck'
 import { NavigationContainer } from '@react-navigation/native'
-import { initialize } from './actions'
+import { initialize, alertUs } from './actions'
 import { createStackNavigator } from '@react-navigation/stack'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import AwesomeAlert from 'react-native-awesome-alerts'
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +40,7 @@ function MyTabs() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
+          activeTintColor: '#0C9BD2',
           inactiveTintColor: 'gray',
         }}
       >
@@ -58,16 +60,27 @@ function HomeScreen() {
 const store = createStore(reducer);
 store.dispatch(initialize())
 const Stack = createStackNavigator();
+let showAlert = false;
+setTimeout(() => {
+  store.dispatch(alertUs())
+},45000)
 
 export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator 
+        initialRouteName="Splash Page"
+        headerMode="screen"
+        screenOptions={{
+          headerTintColor: 'white',
+          headerStyle: { backgroundColor: '#0C9BD2' },
+        }}>
+          <Stack.Screen name="Splash Page" options={{ title: 'Splash Page',headerShown: false}} component={SplashPage}/>
           <Stack.Screen
-            name="Wonderful"
+            name="Home"
             component={MyTabs}
-            options={{ title: 'Home' }}
+            options={{ title: 'Home', headerLeft: null }}
           />
           <Stack.Screen name="Single Deck" component={SingleDeck} />
           <Stack.Screen name="Add Question" component={AddQuestion} />

@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 
 class QuizQuestion extends Component {
     state = {
-        deck : {}
+        deck : {},
+        answers:{}
     }
 
 	static getDerivedStateFromProps (nextProps, prevState) {
@@ -26,7 +27,7 @@ class QuizQuestion extends Component {
 
 function mapStateToProps(state) {
     return {
-        deckList : Object.values(state)
+        answers : Object.values(state).filter(it => !it.questions)[0]
     }
 }
 
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   bigBlue: {
   	textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
     fontSize: 30,
   }
