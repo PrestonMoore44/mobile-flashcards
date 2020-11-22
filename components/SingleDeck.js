@@ -13,7 +13,11 @@ class SingleDeck extends Component {
   }
 
   startQuiz = () => {
-    this.props.navigation.navigate("Quiz", this.state.deck)
+    if(this.state.deck.questions.length === 0) {
+      alert("Add a Question Before Starting a Quiz");
+    } else {
+      this.props.navigation.navigate("Quiz", this.state.deck) 
+    }
   }
 
 	static getDerivedStateFromProps (nextProps, prevState) {
@@ -51,7 +55,7 @@ class SingleDeck extends Component {
 			    	<TouchableOpacity style={styles.button} onPress={this.addQuestion}>
 					     <Text style={{fontSize:18, color:"white"}}>Add Question</Text>
 					</TouchableOpacity>
-			    	<TouchableOpacity disabled={deck.questions.length === 0} style={styles.buttonTwo} onPress={this.startQuiz}>
+			    	<TouchableOpacity style={styles.buttonTwo} onPress={this.startQuiz}>
 					     <Text style={{color:"#5eb7d8", fontSize:18}}>Start Quiz</Text>
 					</TouchableOpacity>
 				</View>

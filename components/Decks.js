@@ -1,10 +1,36 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, Platform, TouchableOpacity, SafeAreaView, View, FlatList } from 'react-native'
 import { connect } from 'react-redux'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { addDeck } from '../actions'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { LinearGradient } from 'expo-linear-gradient'
 import AwesomeAlert from 'react-native-awesome-alerts'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
+const getAllDecks = async () => {
+  try {
+    //await AsyncStorage.clear();
+    const jsonValue = await AsyncStorage.getItem('@Decks');
+    //console.log(jsonValue, " PROPS")
+    if (jsonValue != null) {
+      Object.values(JSON.parse(jsonValue)).forEach((it) => {
+        console.log(it.questions.length, "AYE")
+        store.dispatch(
+          addDeck(Object.assign({
+            "title": it.title,
+            "answers": {
+              "answercount": !!it.questions ? it.questions.length : 0,
+              "showAlert": false
+            }
+          }))
+        )
+      })
+    }
+  } catch(e) {
+    // error reading value
+  }
+}
+getAllDecks();
 
 const Item = ({ item, onPress, style }) => (
   <TouchableOpacity onPress={onPress} style={styles.button}>
@@ -23,7 +49,8 @@ class Decks extends Component {
   }
 
   setSelected = (item) => {
-    this.props.navigation.navigate('Single Deck', item)
+    console.log(item, " Item...")
+    // this.props.navigation.navigate('Single Deck', item)
   }
 
   addDeckNow = () => {
@@ -31,6 +58,7 @@ class Decks extends Component {
   }
 
 	renderItem = ({ item }) => {
+    //console.log(item, " <--- Item.... ")
 	  const backgroundColor = "#f9c2ff";
 	  return (
       <View style={styles.fullStrength} >
@@ -43,7 +71,8 @@ class Decks extends Component {
 	};
 
 	static getDerivedStateFromProps (nextProps, prevState) {
-	  if(nextProps.deckList!==prevState.deckList){
+    //console.log("Whats hapening here...", nextProps)
+	  if(nextProps.deckList !== prevState.deckList) {
 	    return { 
         deckList: nextProps.deckList,
         answers: nextProps.answers,
@@ -53,7 +82,7 @@ class Decks extends Component {
 	}
     
 	render() {
-    let { addDeckNow } = this
+    let { addDeckNow, aDecks } = this
     if ( this.state.deckList.length === 0 ) 
       return (
             <View style={styles.containerTwo}>
@@ -94,6 +123,7 @@ class Decks extends Component {
 }
 
 function mapStateToProps(state) {
+  //console.log(Object.values(state), "Stated...");
   return {
     deckList : Object.values(state).filter(it => !!it.questions),
     answers: Object.values(state).filter(it => !it.questions)[0],

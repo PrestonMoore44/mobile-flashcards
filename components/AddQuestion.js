@@ -3,6 +3,7 @@ import { Text, StyleSheet, Platform, TouchableOpacity, SafeAreaView, View, FlatL
 import { connect } from 'react-redux'
 import { addQuestion } from '../actions'
 import AwesomeAlert from 'react-native-awesome-alerts'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 class AddQuestion extends Component {
     state = {
@@ -31,9 +32,29 @@ class AddQuestion extends Component {
     		}
     	}))
     }
-    saveQuestionAnswer = () => {
-    	this.props.dispatch(addQuestion(this.state.question,this.state.title))
-    	this.props.navigation.navigate('Home')
+    AddCardToDeck = () => {
+        //console.log("This",this.state.question, " <inside saveQuestionAnswer it is " ,this.state.title);
+        const getDataThenSaveQuestion = async (data,title) => {
+            var aDecks = await AsyncStorage.getItem('@Decks');
+            aDecks = JSON.parse(aDecks);
+            const jsonValue = JSON.stringify(
+                Object.assign({
+                    [title] : {
+                        title: title,
+                        questions: !!aDecks[title] && !!aDecks[title].questions && aDecks[title].questions.length > 0 ?
+                        [...aDecks[title].questions, data] : [data] 
+                    }
+                })
+            )
+            var val = await AsyncStorage.setItem('@Decks', jsonValue);
+            const jsonValues = await AsyncStorage.getItem('@Decks')
+            console.log(jsonValues, " After save...")
+            // 
+        }
+        //console.log("This",this.state.question, " Hello it is " ,this.state.title);
+        getDataThenSaveQuestion(this.state.question, this.state.title);
+        this.props.dispatch(addQuestion(this.state.question,this.state.title))
+        this.props.navigation.navigate('Home')
     }
 
 	static getDerivedStateFromProps (nextProps, prevState) {
@@ -48,7 +69,7 @@ class AddQuestion extends Component {
     
 	render() {
 		let { deck } = this.state
-		let { onChangeText, onAnswerChange, saveQuestionAnswer } = this
+		let { onChangeText, onAnswerChange, AddCardToDeck } = this
 		return (
 			<View style={styles.container}>
                 <AwesomeAlert
@@ -81,7 +102,7 @@ class AddQuestion extends Component {
 				    />
 			    </View>
 			    <View style={{ flex: 1, alignItems: 'center' }}>
-			    	<TouchableOpacity style={styles.buttonTwo} onPress={saveQuestionAnswer}>
+			    	<TouchableOpacity style={styles.buttonTwo} onPress={AddCardToDeck}>
 					     <Text style={{color:"#0C9BD2", fontSize:18}}>Save</Text>
 					</TouchableOpacity>
 				</View>

@@ -3,6 +3,7 @@ import { Text, StyleSheet, Platform, TouchableOpacity, SafeAreaView, View, FlatL
 import { connect } from 'react-redux'
 import { addDeck } from '../actions'
 import AwesomeAlert from 'react-native-awesome-alerts'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 class AddDeck extends Component {
     state = {
@@ -10,9 +11,32 @@ class AddDeck extends Component {
         answers:{}
 
     }
-    saveDeck = () => {
+    AddNewDeck = () => {
+      //console.log(this.state, " State to be saed...")
+      let data = this.state;
+      const getDataThenSave = async (data) => {
+        //await AsyncStorage.clear();
+        var aDecks = await AsyncStorage.getItem('@Decks');
+        aDecks = JSON.parse(aDecks);
+        const jsonValue = JSON.stringify(
+          Object.assign({
+          [data.title] : {
+            title: data.title,
+            questions: []
+          }},
+          !!aDecks ? aDecks : {}
+          )
+        )
+        var val = await AsyncStorage.setItem('@Decks', jsonValue);
+        const jsonValues = await AsyncStorage.getItem('@Decks')
+        console.log(jsonValues, " After save...")
+      }
+      getDataThenSave(data);
     	this.props.dispatch(addDeck(this.state))
-    	this.props.navigation.navigate('Home')
+    	this.props.navigation.navigate('Single Deck', Object.assign({
+        questions: [],
+        title: data.title
+      }))
      	this.setState((state,props) => ({
     		title: ''
     	}))
@@ -35,7 +59,7 @@ class AddDeck extends Component {
     
 	render() {
 		let { deck } = this.state
-		let { onAnswerChange, saveDeck} = this
+		let { onAnswerChange, AddNewDeck} = this
 		return (
 			<View style={styles.container}>
         <AwesomeAlert
@@ -63,7 +87,7 @@ class AddDeck extends Component {
 				    />
 			    </View>
 			    <View style={{ flex: 1, alignItems: 'center', marginTop:50}}>
-		    	<TouchableOpacity style={styles.buttonTwo} onPress={saveDeck}>
+		    	<TouchableOpacity style={styles.buttonTwo} onPress={AddNewDeck}>
 				     <Text style={{color:"#0C9BD2", fontSize:20}}>Save</Text>
 				</TouchableOpacity>
 				</View>

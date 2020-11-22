@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   bigBlue: {
   	textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
-    fontFamily: "Verdana-Bold",
     color: '#0C9BD2',
     padding:10,
     alignItems: 'center',

@@ -15,12 +15,49 @@ import Score from './components/Score'
 import Quiz from './components/Quiz'
 import AddDeck from './components/AddDeck'
 import { NavigationContainer } from '@react-navigation/native'
-import { initialize, alertUs } from './actions'
+import { initialize, alertUs, addDeck, addQuestion } from './actions'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import AwesomeAlert from 'react-native-awesome-alerts'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Tab = createBottomTabNavigator();
+const store = createStore(reducer);
+store.dispatch(initialize())
+const Stack = createStackNavigator();
+let showAlert = false;
+setTimeout(() => {
+  store.dispatch(alertUs())
+},45000)
+
+const getAllDecks = async () => {
+  try {
+    //await AsyncStorage.clear();
+    const jsonValue = await AsyncStorage.getItem('@Decks');
+    if (jsonValue != null) {
+      Object.values(JSON.parse(jsonValue)).forEach((it) => {
+        store.dispatch(
+          addDeck(Object.assign({
+            "title": it.title,
+            "answers": {
+              "answercount": !!it.questions ? it.questions.length : 0,
+              "showAlert": false
+            }
+          }))
+        )
+
+        if (it.questions.length > 0) {
+          it.questions.forEach((item) => {
+            store.dispatch(addQuestion(item,it.title))
+          })
+        }
+      })
+    }
+  } catch(e) {
+    // error reading value
+  }
+}
+getAllDecks();
 
 function MyTabs() {
   return (
@@ -57,13 +94,6 @@ function HomeScreen() {
     </View>
   );
 }
-const store = createStore(reducer);
-store.dispatch(initialize())
-const Stack = createStackNavigator();
-let showAlert = false;
-setTimeout(() => {
-  store.dispatch(alertUs())
-},45000)
 
 export default function App() {
   return (

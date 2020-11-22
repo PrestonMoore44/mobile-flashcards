@@ -30,6 +30,7 @@ function entries (state = {}, action) {
           })
       }
     case ADD_QUESTION : 
+      console.log(action, "<< Action in index then state", state )
       return {
         ...state,
         ...Object.assign({},
