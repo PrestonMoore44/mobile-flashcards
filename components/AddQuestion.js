@@ -48,7 +48,7 @@ class AddQuestion extends Component {
             )
             var val = await AsyncStorage.setItem('@Decks', jsonValue);
             const jsonValues = await AsyncStorage.getItem('@Decks')
-            console.log(jsonValues, " After save...")
+           // console.log(jsonValues, " After save...")
             // 
         }
         //console.log("This",this.state.question, " Hello it is " ,this.state.title);

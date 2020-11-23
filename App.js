@@ -32,7 +32,7 @@ setTimeout(() => {
 
 const getAllDecks = async () => {
   try {
-    //await AsyncStorage.clear();
+    // await AsyncStorage.clear();
     const jsonValue = await AsyncStorage.getItem('@Decks');
     if (jsonValue != null) {
       Object.values(JSON.parse(jsonValue)).forEach((it) => {

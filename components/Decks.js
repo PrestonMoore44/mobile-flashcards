@@ -49,8 +49,8 @@ class Decks extends Component {
   }
 
   setSelected = (item) => {
-    console.log(item, " Item...")
-    // this.props.navigation.navigate('Single Deck', item)
+    //console.log(item, " Item...")
+    this.props.navigation.navigate('Single Deck', item)
   }
 
   addDeckNow = () => {

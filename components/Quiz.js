@@ -30,10 +30,10 @@ class Quiz extends Component {
 	    	this.setState((state, props) => ({
 		    	checkMe: false,
 		    	showMe:false,
-		    	index: state.index + 1,
+		    	index: state.index,
                 answer:'',
                 showQuestionAnswer: false,
-		    	deckQuestion: state.deck[state.index+1]
+		    	deckQuestion: state.deckQuestion
 		    }))
     	} else {
             this.props.dispatch(incrementScore())

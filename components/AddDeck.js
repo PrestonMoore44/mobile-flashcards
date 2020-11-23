@@ -29,7 +29,7 @@ class AddDeck extends Component {
         )
         var val = await AsyncStorage.setItem('@Decks', jsonValue);
         const jsonValues = await AsyncStorage.getItem('@Decks')
-        console.log(jsonValues, " After save...")
+        //console.log(jsonValues, " After save...")
       }
       getDataThenSave(data);
     	this.props.dispatch(addDeck(this.state))
