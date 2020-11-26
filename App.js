@@ -1,12 +1,11 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Platform, StatusBar  } from 'react-native';
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
 import { TabNavigator, StackNavigator } from 'react-navigation'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
-import { Constants } from 'expo'
 import Decks from './components/Decks'
 import SingleDeck from './components/SingleDeck'
 import AddQuestion from './components/AddQuestion'
@@ -20,6 +19,19 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import AwesomeAlert from 'react-native-awesome-alerts'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+
+const formatDate = () => {
+  var dateNow = new Date();
+  var dd = dateNow.getDate();
+  var mm = dateNow.getMonth() + 1; //January is 0
+  var yyyy = dateNow.getFullYear();
+  if (dd < 10) { dd = '0' + dd }
+  if (mm < 10) { mm = '0' + mm }
+  return mm + '/' + dd + '/' + yyyy;  
+};
 
 const Tab = createBottomTabNavigator();
 const store = createStore(reducer);
@@ -29,6 +41,85 @@ let showAlert = false;
 setTimeout(() => {
   store.dispatch(alertUs())
 },45000)
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+// Second, call the method
+const schedulePushNotification = async() => {
+  let notify = await Notifications.scheduleNotificationAsync({
+    content: {
+      title: 'REMINDER',
+      body: "Don't forget to take a quiz!",
+    },
+      trigger: {
+        seconds: 1,
+      },
+  });
+}
+let myInterval = setInterval(() => {
+  const getCertainDecks = async () => {
+    const jsonValuee = await AsyncStorage.getItem('@AnswerCount');
+    if (jsonValuee != null) {
+      if (!!Object.entries(JSON.parse(jsonValuee)).find(it => formatDate() === it[0] && !!it[1].count)) {
+        console.log("Answer has been answered today!")
+      } else {
+        schedulePushNotification();
+      }
+    } else {
+      schedulePushNotification();
+    }
+  }
+  getCertainDecks();
+}, 86400)
+
+// clearInterval(myInterval);
+
+async function allowsNotificationsAsync() {
+  const settings = await Notifications.getPermissionsAsync();
+  console.log(settings, "Settings")
+  return (
+    settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+  );
+}
+
+const registerForPushNotificationsAsync = async() => {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+  //console.log(token ,  " Token...")
+  return token;
+}
+
+registerForPushNotificationsAsync()
 
 const getAllDecks = async () => {
   try {
@@ -96,6 +187,27 @@ function HomeScreen() {
 }
 
 export default function App() {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
   return (
     <Provider store={store}>
       <NavigationContainer>

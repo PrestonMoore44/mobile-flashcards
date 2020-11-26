@@ -1,10 +1,13 @@
 PODS:
   - boost-for-react-native (1.63.0)
+  - BRYXBanner (0.8.4)
   - BVLinearGradient (2.5.6):
     - React
   - CocoaAsyncSocket (7.6.4)
   - CocoaLibEvent (1.0.0)
   - DoubleConversion (1.1.6)
+  - EXApplication (2.3.0):
+    - UMCore
   - EXConstants (9.2.0):
     - UMConstantsInterface
     - UMCore
@@ -28,6 +31,9 @@ PODS:
     - UMCore
     - UMPermissionsInterface
     - UMTaskManagerInterface
+  - EXNotifications (0.7.2):
+    - UMCore
+    - UMPermissionsInterface
   - EXPermissions (9.3.0):
     - UMCore
     - UMPermissionsInterface
@@ -335,13 +341,23 @@ PODS:
     - React-Core (= 0.63.3)
     - React-cxxreact (= 0.63.3)
     - React-jsi (= 0.63.3)
+  - RNCAsyncStorage (1.13.2):
+    - React
   - RNCMaskedView (0.1.10):
     - React
   - RNGestureHandler (1.7.0):
     - React
+  - RNImageHelper (0.0.3):
+    - React
+  - RNNotificationBanner (2.0.0):
+    - BRYXBanner
+    - React
+    - RNImageHelper
   - RNReanimated (1.13.1):
     - React
   - RNScreens (2.10.1):
+    - React
+  - RNVectorIcons (7.1.0):
     - React
   - UMAppLoader (1.3.0)
   - UMBarCodeScannerInterface (5.3.0)
@@ -367,6 +383,7 @@ PODS:
 DEPENDENCIES:
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - EXApplication (from `../node_modules/expo-application/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
@@ -375,6 +392,7 @@ DEPENDENCIES:
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - EXLocation (from `../node_modules/expo-location/ios`)
+  - EXNotifications (from `../node_modules/expo-notifications/ios`)
   - EXPermissions (from `../node_modules/expo-permissions/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - EXSQLite (from `../node_modules/expo-sqlite/ios`)
@@ -425,10 +443,14 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageHelper (from `../node_modules/react-native-image-helper/ios`)
+  - RNNotificationBanner (from `../node_modules/react-native-notification-banner/ios`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
@@ -447,6 +469,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - BRYXBanner
     - CocoaAsyncSocket
     - CocoaLibEvent
     - Flipper
@@ -464,6 +487,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  EXApplication:
+    :path: "../node_modules/expo-application/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
   EXErrorRecovery:
@@ -480,6 +505,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-linear-gradient/ios"
   EXLocation:
     :path: "../node_modules/expo-location/ios"
+  EXNotifications:
+    :path: "../node_modules/expo-notifications/ios"
   EXPermissions:
     :path: "../node_modules/expo-permissions/ios"
   EXSplashScreen:
@@ -538,14 +565,22 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageHelper:
+    :path: "../node_modules/react-native-image-helper/ios"
+  RNNotificationBanner:
+    :path: "../node_modules/react-native-notification-banner/ios"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   UMAppLoader:
     :path: "../node_modules/unimodules-app-loader/ios"
   UMBarCodeScannerInterface:
@@ -577,10 +612,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  BRYXBanner: 4fbd266f96ce000e4c6cc9a0558c446bd88d9801
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   DoubleConversion: cde416483dac037923206447da6e1454df403714
+  EXApplication: 256b2a1348fc4a178d56bdbf45abeb08bee571c5
   EXConstants: 6ec1ea4a13ec734c7e2274bc9e5b7408d73007a1
   EXErrorRecovery: cfb65ec51567cf57a00b2720a2367ac009298319
   EXFileSystem: efd6c0225f90c8b2c85131d578a09e13197e8b70
@@ -589,6 +626,7 @@ SPEC CHECKSUMS:
   EXKeepAwake: 4502a0ed7b7c5135587004e6d118acf8cea055fc
   EXLinearGradient: 54bec9b1b4940407fc498cab6a0c49c617c8cf54
   EXLocation: 210d39a6e5d793f9721117a11c0b27dc523a3183
+  EXNotifications: ca8ece365fd80604c4afd7a7b2d9e3c6b53ebe8e
   EXPermissions: 5797c6c72efb411b2bbf502cd5acd841e3ffeefa
   EXSplashScreen: accde6b1aaa87f395d6c5e0542e23d5c09a549ab
   EXSQLite: 246074ef810a3b5e41c0cf8cde141adccc3b0f6b
@@ -626,10 +664,14 @@ SPEC CHECKSUMS:
   React-RCTText: 65a6de06a7389098ce24340d1d3556015c38f746
   React-RCTVibration: 8e9fb25724a0805107fc1acc9075e26f814df454
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
+  RNCAsyncStorage: bc2f81cc1df90c267ce9ed30bb2dbc93b945a8ee
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
+  RNImageHelper: 664211446e35da3f50b65f72d71c05a8f55f22a5
+  RNNotificationBanner: 01777f470edd9ee6492d76e20ba85a490db8c846
   RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
+  RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   UMAppLoader: 939854a42e69527ee11dd17b39ebafcbfbefd05c
   UMBarCodeScannerInterface: 198ced513a0cf8143d822620f1620bce467d02be
   UMCameraInterface: dbcaade8d0364ba5518ae4519c63c59bf010aa89
@@ -646,6 +688,6 @@ SPEC CHECKSUMS:
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: d626d6941b742552047ba8bfea8628fd142345f6
+PODFILE CHECKSUM: 3172546fb46deacd07ffedc5e80af6f306d3888b
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0

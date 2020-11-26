@@ -5,6 +5,17 @@ import { EmojiRain } from 'react-native-emoji-rain'
 import { incrementScore } from '../actions'
 import QuizQuestion from './QuizQuestion'
 import AwesomeAlert from 'react-native-awesome-alerts'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+const formatDate = () => {
+  var dateNow = new Date();
+  var dd = dateNow.getDate();
+  var mm = dateNow.getMonth() + 1; //January is 0
+  var yyyy = dateNow.getFullYear();
+  if (dd < 10) { dd = '0' + dd }
+  if (mm < 10) { mm = '0' + mm }
+  return mm + '/' + dd + '/' + yyyy;  
+};
 
 class Quiz extends Component {
     state = {
@@ -37,6 +48,20 @@ class Quiz extends Component {
 		    }))
     	} else {
             this.props.dispatch(incrementScore())
+            const setAnswerCount = async() => {
+            var val = await AsyncStorage.setItem('@AnswerCount',
+                JSON.stringify(
+                Object.assign({
+                    [formatDate()] : {
+                            count: 1
+                        }
+                    })
+                )
+            )
+            var ans = await AsyncStorage.getItem('@AnswerCount');
+            console.log(ans, "Answer..... Aver Count")
+            }
+            setAnswerCount();
             this.setState((state, props) => ({
                 checkMe: false,
                 showMe:false,
@@ -56,6 +81,7 @@ class Quiz extends Component {
     	},4500)
     }
 
+
     checkAnswer = () => {
     	this.setState((state, props) => (
     		state.answer == state.deckQuestion.answer ?
@@ -71,6 +97,11 @@ class Quiz extends Component {
 	    	this.resetCheckMe();		
     	},4500)
     }
+
+    componentWillUnmount = () => {
+        clearTimeout(this.checkAnswer);
+        clearTimeout(this.showAnswer);
+    };
 
 	static getDerivedStateFromProps (nextProps, prevState) {
 	    if (nextProps.route.params) {
